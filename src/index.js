@@ -7,18 +7,23 @@
 
 /** @type {boolean | null} */
 let DEBUG = false;
+
 /** @type {string | null} */
 let API_KEY = null;
+
 /** @type {string | null} */
 let LANGUAGE = "en";
+
 /** @type {string | number | boolean | null} */
 let REGION = null;
+
 /** @type {string | null} */
 const GOOGLE_API = "https://maps.google.com/maps/api/geocode/json";
 
 /**
  * @param {string} message
  * @param {boolean} warn
+ * @returns {void}
  */
 function log(message, warn = false) {
   if (DEBUG) {
@@ -59,46 +64,71 @@ async function handleUrl(url) {
   );
 }
 
+/**
+* @param {string} [apiKey]
+* @param {string} [language]
+* @param {string | null} [region]
+* @returns {string}
+*/
+function buildQueryString(apiKey, language, region) {
+ let queryString = "";
+
+ if (apiKey || API_KEY) {
+   API_KEY = apiKey || API_KEY;
+   queryString += `&key=${API_KEY}`;
+ }
+
+ if (language || LANGUAGE) {
+   LANGUAGE = language || LANGUAGE;
+   queryString += `&language=${LANGUAGE}`;
+ }
+
+ if (region || REGION) {
+   REGION = region || REGION;
+   // @ts-ignore
+   queryString += `&region=${encodeURIComponent(REGION)}`;
+ }
+
+ return queryString;
+}
+
+/**
+ * @namespace reactGeocode
+ */
 const reactGeocode = {
   /**
-   *
-   *
    * @param {string} apiKey
+   * @returns {void}
    */
   setApiKey(apiKey) {
     API_KEY = apiKey;
   },
 
   /**
-   *
-   *
    * @param {string} language
+   * @returns {void}
    */
   setLanguage(language) {
     LANGUAGE = language;
   },
 
   /**
-   *
-   *
    * @param {string} region
+   * @returns {void}
    */
   setRegion(region) {
     REGION = region;
   },
 
   /**
-   *
-   *
    * @param {boolean} [flag=true]
+   * @returns {void}
    */
   enableDebug(flag = true) {
     DEBUG = flag;
   },
 
   /**
-   *
-   *
    * @param {string} lat
    * @param {string} lng
    * @param {string} [apiKey]
@@ -113,30 +143,13 @@ const reactGeocode = {
     }
 
     const latLng = `${lat},${lng}`;
-    let url = `${GOOGLE_API}?latlng=${encodeURIComponent(latLng)}`;
 
-    if (apiKey || API_KEY) {
-      API_KEY = apiKey || API_KEY;
-      url += `&key=${API_KEY}`;
-    }
-
-    if (language || LANGUAGE) {
-      LANGUAGE = language || LANGUAGE;
-      url += `&language=${LANGUAGE}`;
-    }
-
-    if (region || REGION) {
-      REGION = region || REGION;
-      // @ts-ignore
-      url += `&region=${encodeURIComponent(REGION)}`;
-    }
+    const url = `${GOOGLE_API}?latlng=${encodeURIComponent(latLng)}${buildQueryString(apiKey, language, region)}`;
 
     return handleUrl(url);
   },
 
   /**
-   *
-   *
    * @param {string} address
    * @param {string} [apiKey]
    * @param {string} [language]
@@ -149,26 +162,13 @@ const reactGeocode = {
       return Promise.reject(new Error("Provided address is invalid"));
     }
 
-    let url = `${GOOGLE_API}?address=${encodeURIComponent(address)}`;
-
-    if (apiKey || API_KEY) {
-      API_KEY = apiKey || API_KEY;
-      url += `&key=${API_KEY}`;
-    }
-
-    if (language || LANGUAGE) {
-      LANGUAGE = language || LANGUAGE;
-      url += `&language=${LANGUAGE}`;
-    }
-
-    if (region || REGION) {
-      REGION = region || REGION;
-      // @ts-ignore
-      url += `&region=${encodeURIComponent(REGION)}`;
-    }
+    const url = `${GOOGLE_API}?address=${encodeURIComponent(address)}${buildQueryString(apiKey, language, region)}`;
 
     return handleUrl(url);
   }
 };
 
+/**
+ * @module 'react-geocode'
+ */
 export default reactGeocode;

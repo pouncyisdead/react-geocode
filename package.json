@@ -1,12 +1,22 @@
 {
   "name": "react-geocode",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A module to transform a description of a location (i.e. street address, town name, etc.) into geographic coordinates (i.e. latitude and longitude) and vice versa.",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "author": "Pir Shukarulalh Shah <shuker_rashdi@hotmail.com> (http://www.shukarullah.com)",
+  "contributors": [
+    {
+      "name": "Mike Pouncy",
+      "url": "https://github.com/pouncyisdead/"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/shukerullah/react-geocode#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shukerullah/react-geocode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shukerullah/react-geocode/issues"
   },
   "keywords": [
     "google",
@@ -14,13 +24,21 @@
     "geocoder",
     "geocoding"
   ],
-  "author": "Pir Shukarulalh Shah <shuker_rashdi@yahoo.com> (http://www.shukarullah.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shukerullah/react-geocode/issues"
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "npm run build:types && npm run build:js",
+    "build:js": "babel src -d lib --extensions '.js'",
+    "build:types": "tsc --emitDeclarationOnly"
   },
-  "homepage": "https://github.com/shukerullah/react-geocode#readme",
-  "dependencies": {
-    "regenerator-runtime": "^0.13.3"
-  }
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-typescript": "^7.7.7",
+    "babel-preset-minify": "^0.5.1",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {}
 }
